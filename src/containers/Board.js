@@ -6,7 +6,7 @@ import Player from "../components/Player/Player";
 
 const initialState = {
   board: Array(9).fill(null),
-  markerX: true,
+  markerX: null,
   winMarker: null,
   draw: false,
   touched: false,
@@ -81,6 +81,7 @@ class Board extends Component {
       if (!winMarker) {
         this.drawCheck();
       }
+
       this.setState(prevState => {
         return {
           board: newboard,
@@ -110,7 +111,8 @@ class Board extends Component {
     } = this.state;
     let message;
 
-    // console.log(board, markerX, winMarker, touched);
+    // console.log("Board:", board);
+    // console.log("markerX:", markerX, "winMarker:", winMarker);
     board = board.map((box, index) => {
       return (
         <Box
