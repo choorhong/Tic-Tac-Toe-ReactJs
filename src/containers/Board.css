@@ -1,0 +1,21 @@
+.Board {
+  display: inline-flex;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  width: 340px;
+  margin: 20px;
+}
+
+.Message {
+  position: absolute;
+  bottom: 25%;
+}
+
+.ResetGame {
+  height: 70px;
+  width: 100px;
+  position: absolute;
+  bottom: 10%;
+}
