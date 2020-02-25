@@ -7,15 +7,13 @@ import Player from "../components/Player/Player";
 const initialState = {
   board: Array(9).fill(null),
   markerX: null,
-  winMarker: null,
-  draw: false,
+  winStatus: null,
   touched: false,
   disabled: false,
   selectedRadio: null
 };
 
 class Board extends Component {
-  // state = initialState;
   state = { ...initialState, board: [...initialState.board] };
 
   choosePlayerHandler = event => {
@@ -34,7 +32,7 @@ class Board extends Component {
     });
   };
 
-  winCheck = marker => {
+  boardCheck = marker => {
     let winningCombos = [
       [0, 1, 2],
       [3, 4, 5],
@@ -47,26 +45,27 @@ class Board extends Component {
     ];
 
     let { board } = this.state;
+
+    // Check for winner(marker)
     for (let i = 0; i < winningCombos.length; i++) {
       let [a, b, c] = winningCombos[i];
 
       if (board[a] === marker && board[b] === marker && board[c] === marker) {
-        return this.setState({ winMarker: marker });
+        return this.setState({ winStatus: marker });
       }
     }
-  };
 
-  drawCheck = () => {
-    let { board } = this.state;
+    // check for a DRAW game
     let res = board.every(box => {
       return box !== null;
     });
-    this.setState({ draw: res });
+    if (res) {
+      this.setState({ winStatus: "draw" });
+    }
   };
 
   placeMarkerHandler = index => {
     let newboard = this.state.board;
-    let { winMarker } = this.state;
     let marker;
     if (this.state.markerX) {
       marker = "X";
@@ -77,11 +76,7 @@ class Board extends Component {
     if (newboard[index] == null) {
       newboard[index] = marker;
 
-      this.winCheck(marker);
-      if (!winMarker) {
-        this.drawCheck();
-      }
-
+      this.boardCheck(marker);
       this.setState(prevState => {
         return {
           board: newboard,
@@ -101,33 +96,25 @@ class Board extends Component {
 
   render() {
     // console.log(initialState);
-    let {
-      board,
-      winMarker,
-      draw,
-      touched,
-      disabled,
-      selectedRadio
-    } = this.state;
+    let { board, winStatus, touched, disabled, selectedRadio } = this.state;
     let message;
 
     // console.log("Board:", board);
-    // console.log("markerX:", markerX, "winMarker:", winMarker);
     board = board.map((box, index) => {
       return (
         <Box
           key={index}
           click={() => this.placeMarkerHandler(index)}
-          winMarker={winMarker}
+          winStatus={winStatus}
           marker={box}
           touched={touched}
         />
       );
     });
 
-    if (winMarker) {
-      message = <h2> Player {winMarker} Won!</h2>;
-    } else if (draw) {
+    if (winStatus === "O" || winStatus === "X") {
+      message = <h2> Player {winStatus} Won!</h2>;
+    } else if (winStatus === "draw") {
       message = <h2>Draw Game</h2>;
     }
 

@@ -5,7 +5,7 @@ const Box = props => {
   return (
     <div
       className="Box"
-      onClick={props.touched && !props.winMarker ? props.click : null}
+      onClick={props.touched && !props.winStatus ? props.click : null}
     >
       {props.marker}
     </div>
